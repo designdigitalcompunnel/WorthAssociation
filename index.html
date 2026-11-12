@@ -63,8 +63,10 @@ h1 em{color:var(--ac);font-style:italic}
 .lw{position:relative;width:min(100%,460px,52vh);aspect-ratio:1.067;margin:0 auto;filter:drop-shadow(0 22px 26px #0003)}
 .lw:before{content:"";position:absolute;inset:0;background:var(--ac);opacity:.22;-webkit-mask-image:var(--worth-brush);mask-image:var(--worth-brush);-webkit-mask-size:100% 100%;mask-size:100% 100%;-webkit-mask-position:center;mask-position:center;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;transform:translate(16px,16px)}
 .fr{position:absolute;inset:0;-webkit-mask-image:var(--worth-brush);mask-image:var(--worth-brush);-webkit-mask-size:100% 100%;mask-size:100% 100%;-webkit-mask-position:center;mask-position:center;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;transition:transform .25s ease-out}
-.sl{position:absolute;inset:0;opacity:0;transition:opacity 1s}.sl.on{opacity:1}
-.sl img{transform:scale(1.12);transition:transform 6s linear}.sl.on img{transform:scale(1)}
+.sl{position:absolute;inset:0;opacity:0;transition:opacity 1s;overflow:hidden;isolation:isolate}.sl.on{opacity:1}
+.sl:after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(96deg,rgba(248,106,66,.48) 6%,rgba(255,95,104,.40) 32%,rgba(255,72,138,.46) 62%,rgba(237,15,119,.55) 100%);mix-blend-mode:multiply;opacity:1}
+.sl:before{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,rgba(255,255,255,.12),rgba(255,255,255,0) 28%,rgba(0,0,0,0) 60%,rgba(0,0,0,.06) 100%);mix-blend-mode:screen;opacity:.7}
+.sl img{transform:scale(1.12);transition:transform 6s linear;filter:saturate(1.08) contrast(1.02) brightness(.98)}.sl.on img{transform:scale(1)}
 .cap{margin-top:14px;background:var(--card);color:var(--ink);border:1px solid var(--ln);border-radius:18px;padding:14px 18px;display:flex;justify-content:space-between;align-items:center;gap:12px;transition:transform .3s}
 .cap:hover{transform:translateY(-4px)}.cap small{display:block;color:var(--ac);font-weight:600;font-size:.72rem;letter-spacing:.1em;text-transform:uppercase}
 .cap b{display:block;font:300 1.35rem/1.2 var(--serif)}.cap span.d{font-size:.85rem;color:var(--mut)}
@@ -262,7 +264,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible{ou
 #ap{display:none!important}
 /* Rebalanced three-column footer, shared by Homepage and Programs. */
 footer#contact{background:#211C21!important;color:#FFFAFB!important;padding:76px var(--gut) 30px!important;position:relative;overflow:hidden;isolation:isolate}
-footer#contact::before,footer#contact::after{display:none!important}
+/* Footer brush decoration controlled by the final polish styles below. */
 footer#contact > .g{display:grid!important;grid-template-columns:minmax(0,1.55fr) minmax(135px,.68fr) minmax(185px,.94fr)!important;gap:clamp(25px,3.4vw,56px)!important;align-items:start!important;width:100%;margin:0 auto;max-width:1440px}
 footer#contact > .g > *{min-width:0;align-self:start}
 footer#contact > .g > #newsletter{grid-column:1!important;grid-row:1!important}
@@ -427,57 +429,42 @@ footer#contact .brand-logo-inverse{
 #hero .hbg > img { display:none !important; }
 /* More breathable newsletter field/button spacing on both pages. */
 footer#contact #newsletterForm { column-gap:14px !important; row-gap:12px !important; }
-/* Two softly animated WORTH brushstroke silhouettes, behind footer content. */
+/* WORTH footer: subtle animated pattern, NOT the logo/brush silhouette. */
+footer#contact { position:relative; isolation:isolate; overflow:hidden; }
 footer#contact::before, footer#contact::after {
-  content:"";
-  display:block !important;
-  position:absolute;
-  z-index:0;
-  pointer-events:none;
-  background:linear-gradient(108deg,#F56A41 0%,#EF4170 53%,#ED0F77 100%);
-  -webkit-mask-image:url("assets/worth-brush-mask.svg");
-  mask-image:url("assets/worth-brush-mask.svg");
-  -webkit-mask-repeat:no-repeat;
-  mask-repeat:no-repeat;
-  -webkit-mask-position:center;
-  mask-position:center;
-  -webkit-mask-size:contain;
-  mask-size:contain;
-  border:0;
-  filter:none;
-  will-change:transform;
+  content:""; display:block !important; position:absolute; inset:0;
+  width:100%; height:100%; aspect-ratio:auto; right:auto; left:0; top:0; bottom:auto;
+  z-index:0; pointer-events:none;
+  -webkit-mask:none !important; mask:none !important;
+  border:0; filter:none; transform:none;
+  background-color:transparent;
+  background-image:none;
+  background-repeat:repeat;
 }
+/* Tiny staggered dots in brand rose; distinct from the WORTH brush mark. */
 footer#contact::before {
-  width:clamp(270px,37vw,510px);
-  aspect-ratio:1840 / 854;
-  right:-7%; top:8%;
-  opacity:.075;
-  animation:worthFooterBrushDrift 22s ease-in-out infinite alternate;
+  background-image:radial-gradient(circle, rgba(237,15,119,.65) 1.35px, transparent 1.8px);
+  background-size:34px 34px;
+  background-position:0 0;
+  opacity:.23;
+  animation:worthFooterDotDrift 32s linear infinite;
 }
+/* Very fine diagonal dashes provide a second, barely visible texture. */
 footer#contact::after {
-  width:clamp(220px,26vw,340px);
-  aspect-ratio:1840 / 854;
-  left:22%; bottom:3%;
-  opacity:.045;
-  animation:worthFooterBrushDriftAlt 27s ease-in-out infinite alternate;
+  background-image:repeating-linear-gradient(135deg,transparent 0,transparent 83px,rgba(246,106,65,.30) 84px,transparent 85px,transparent 168px);
+  background-size:240px 240px;
+  background-position:0 0;
+  opacity:.18;
+  animation:worthFooterLineDrift 46s linear infinite;
 }
-footer#contact > .g, footer#contact > small { position:relative; z-index:2; }
-@keyframes worthFooterBrushDrift {
-  from { transform:translate3d(0,0,0) rotate(-8deg); }
-  to { transform:translate3d(-22px,14px,0) rotate(-2deg); }
-}
-@keyframes worthFooterBrushDriftAlt {
-  from { transform:translate3d(0,0,0) rotate(8deg); }
-  to { transform:translate3d(18px,-12px,0) rotate(13deg); }
-}
+footer#contact > .g, footer#contact > small {position:relative;z-index:2;}
+@keyframes worthFooterDotDrift {from{background-position:0 0;}to{background-position:68px -34px;}}
+@keyframes worthFooterLineDrift {from{background-position:0 0;}to{background-position:-120px 120px;}}
 @media(max-width:600px) {
-  footer#contact::before {right:-20%; top:12%; opacity:.055; width:280px;}
-  footer#contact::after {left:8%; bottom:4%; opacity:.035; width:220px;}
-  footer#contact #newsletterForm { gap:12px !important; }
+  footer#contact::before{opacity:.17;background-size:40px 40px;}
+  footer#contact::after{opacity:.13;}
 }
-@media(prefers-reduced-motion:reduce) {
-  footer#contact::before, footer#contact::after {animation:none !important;will-change:auto;}
-}
+@media(prefers-reduced-motion:reduce){footer#contact::before,footer#contact::after{animation:none!important;}}
 </style>
 </head><body>
 <div id="bar"></div><div id="cur"></div><div class="im" id="pv"></div>
